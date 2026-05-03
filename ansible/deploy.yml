@@ -43,9 +43,18 @@
         dest: "{{ app_dir }}"
         force: yes
 
+    - name: Ensure backend .env exists
+      copy:
+        dest: "{{ app_dir }}/backend/.env"
+        content: |
+          NODE_ENV=production
+          PORT=5000
+          MONGO_URI=mongodb://mongo:27017/todo
+          JWT_SECRET=BI_MAT
+
     # 🚀 Run docker-compose
-    - name: Run docker-compose
-      command: docker-compose up -d
-      args:
-        chdir: "{{ app_dir }}"
-        
+    - name: Deploy stack
+      community.docker.docker_compose:
+        project_src: "{{ app_dir }}"
+        pull: yes
+        state: present

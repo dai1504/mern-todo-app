@@ -15,7 +15,7 @@ scrape_configs:
 
   - job_name: 'backend'
     static_configs:
-      - targets: ['backend:8001']
+      - targets: ['backend:5000']
 
   - job_name: 'cadvisor'
     static_configs:
