@@ -1,0 +1,26 @@
+name: CI/CD 
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login DockerHub
+        run: echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+
+      - name: Build backend
+        run: docker build -t nguyendai/mern-backend ./backend
+
+      - name: Build frontend
+        run: docker build -t nguyendai/mern-frontend ./frontend
+
+      - name: Push images
+        run: |
+          docker push nguyendai/mern-backend
+          docker push nguyendai/mern-frontend

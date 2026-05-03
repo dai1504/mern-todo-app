@@ -1,0 +1,56 @@
+# =========================
+# NODEJS / MERN
+# =========================
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+.env.*
+dist/
+build/
+
+# =========================
+# DOCKER
+# =========================
+docker-compose.override.yml
+
+# =========================
+# TERRAFORM
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ❌ cực kỳ quan trọng (SSH key)
+*.pem
+*.key
+
+# =========================
+# ANSIBLE
+# =========================
+*.retry
+
+# =========================
+# OS / EDITOR
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =========================
+# LOGS
+# =========================
+logs/
+*.log
+
+# =========================
+# SECRET / CONFIG
+# =========================
+.env.local
+.env.production

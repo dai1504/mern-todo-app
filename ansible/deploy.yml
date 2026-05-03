@@ -1,0 +1,51 @@
+- name: Deploy MERN DevOps App
+  hosts: vps
+  become: yes
+  vars_files:
+    - vars.yml
+
+  tasks:
+
+    # 🔄 Update hệ thống
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    # 🐳 Cài Docker
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    # 📦 Cài docker-compose
+    - name: Install docker-compose
+      apt:
+        name: docker-compose
+        state: present
+
+    # 👤 Add user ubuntu vào docker group
+    - name: Add ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    # 📁 Clone project
+    - name: Clone repo
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        force: yes
+
+    # 🚀 Run docker-compose
+    - name: Run docker-compose
+      command: docker-compose up -d
+      args:
+        chdir: "{{ app_dir }}"
+        

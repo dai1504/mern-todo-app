@@ -1,0 +1,43 @@
+groups:
+  - name: devops-alerts
+    rules:
+
+      # 🔥 CPU > 80%
+      - alert: HighCPUUsage
+        expr: (100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100)) > 50
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU usage cao"
+          description: "CPU > 80% trong 30s"
+
+      # 🔥 RAM > 80%
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 80
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAM usage cao"
+          description: "RAM > 80% trong 30s"
+
+      # 🔥 Backend down
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend down"
+          description: "Backend không phản hồi"
+
+      # 🔥 Container down (cadvisor)
+      - alert: ContainerDown
+        expr: time() - container_last_seen > 30
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Container down"
+          description: "Container không gửi metrics"
