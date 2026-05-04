@@ -94,7 +94,6 @@ services:
       - mongo
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
-    container_name: cadvisor
     ports:
       - "8081:8080"
     volumes:
