@@ -119,8 +119,4 @@ resource "aws_instance" "devops_server" {
       host        = self.public_ip
     }
   }
-
-  provisioner "local-exec" {
-    command = "ansible-playbook -i '${self.public_ip},' --private-key devops-key.pem ../ansible/deploy.yml"
-  }
 }
