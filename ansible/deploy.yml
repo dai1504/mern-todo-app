@@ -1,60 +1,26 @@
-- name: Deploy MERN DevOps App
-  hosts: vps
+- hosts: all
   become: yes
-  vars_files:
-    - vars.yml
 
   tasks:
-
-    # 🔄 Update hệ thống
-    - name: Update apt
-      apt:
-        update_cache: yes
-
-    # 🐳 Cài Docker
     - name: Install Docker
       apt:
         name: docker.io
         state: present
+        update_cache: yes
 
-    - name: Start Docker
-      service:
-        name: docker
-        state: started
-        enabled: true
+    - name: Install docker compose
+      shell: |
+        mkdir -p /usr/local/lib/docker/cli-plugins
+        curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
+        -o /usr/local/lib/docker/cli-plugins/docker-compose
+        chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
-    # 📦 Cài docker-compose
-    - name: Install docker-compose
-      apt:
-        name: docker-compose
-        state: present
+    - name: Create app folder
+      file:
+        path: /home/ubuntu/app
+        state: directory
 
-    # 👤 Add user ubuntu vào docker group
-    - name: Add ubuntu to docker group
-      user:
-        name: ubuntu
-        groups: docker
-        append: yes
-
-    # 📁 Clone project
-    - name: Clone repo
-      git:
-        repo: "{{ repo_url }}"
-        dest: "{{ app_dir }}"
-        force: yes
-
-    - name: Ensure backend .env exists
+    - name: Copy docker-compose
       copy:
-        dest: "{{ app_dir }}/backend/.env"
-        content: |
-          NODE_ENV=production
-          PORT=5000
-          MONGO_URI=mongodb://mongo:27017/todo
-          JWT_SECRET=BI_MAT
-
-    # 🚀 Run docker-compose
-    - name: Deploy stack
-      community.docker.docker_compose:
-        project_src: "{{ app_dir }}"
-        pull: yes
-        state: present
+        src: ../docker-compose.yml
+        dest: /home/ubuntu/app/docker-compose.yml

@@ -1,4 +1,4 @@
-name: CI/CD 
+name: CI 
 
 on:
   push:
@@ -27,3 +27,9 @@ jobs:
         run: |
           docker push nguyendai/mern-backend
           docker push nguyendai/mern-frontend
+      - name: Set image tag
+        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Trigger Jenkins Deploy
+        run: |
+          curl -X POST "http://<JENKINS-IP>:8080/job/deploy/buildWithParameters?token=deploy-token&IMAGE_TAG=${{ env.TAG }}"

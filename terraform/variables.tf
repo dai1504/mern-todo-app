@@ -1,7 +1,10 @@
 variable "aws_region" {
-  default = "ap-southeast-1"
+  description = "AWS region"
+  type        = string
 }
 
 variable "instance_type" {
-  default = "t3.micro"
+  description = "EC2 instance type"
+  type        = string
+  default     = "t3.small"
 }
