@@ -14,19 +14,27 @@ pipeline {
     stages {
         stage('Deploy') {
             steps {
-                sshagent(credentials: [SSH_KEY]) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${VPS_IP} '
-                        set -e
-                        cd ${APP_DIR}
-                        export IMAGE_TAG=${IMAGE_TAG}
+                sshagent(credentials: ['devops-key']) {
+                    withCredentials([
+                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI'),
+                        string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET')
+                    ]) {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no ubuntu@${VPS_IP} '
+                            set -e
+                            cd ${APP_DIR}
+                            
+                            export IMAGE_TAG=${IMAGE_TAG}
+                            export MONGO_URI="${MONGO_URI}"
+                            export JWT_SECRET="${JWT_SECRET}"
 
-                        docker compose pull
-                        docker compose up -d
+                            docker compose pull
+                            docker compose up -d
 
-                        docker image prune -f
-                    '
-                    """
+                            docker image prune -f
+                        '
+                        """
+                    }
                 }
             }
         }
