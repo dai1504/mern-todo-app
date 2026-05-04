@@ -6,6 +6,8 @@ services:
     volumes:
       - mongo_data:/data/db
     restart: always
+    networks:
+      - app-network
 
   backend:
     image: nguyendai/mern-backend:latest
@@ -71,6 +73,8 @@ services:
     restart: always
     networks:
       - app-network
+    depends_on:
+      - mongo
 
 
 volumes:
@@ -78,3 +82,4 @@ volumes:
 
 networks:
   app-network:
+    driver: bridge
