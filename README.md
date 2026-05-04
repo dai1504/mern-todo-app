@@ -21,4 +21,4 @@ docker-compose up --build
 
 ## Grafana
 - ID: admin
-- Pass: 123123 
+- Pass: 123123  
