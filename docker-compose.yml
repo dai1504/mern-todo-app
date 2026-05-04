@@ -72,18 +72,6 @@ services:
     networks:
       - app-network
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    ports:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    restart: always
-    networks:
-      - app-network
 
 volumes:
   mongo_data:

@@ -31,13 +31,3 @@ groups:
         annotations:
           summary: "Backend down"
           description: "Backend không phản hồi"
-
-      # 🔥 Container down (cadvisor)
-      - alert: ContainerDown
-        expr: time() - container_last_seen > 30
-        for: 30s
-        labels:
-          severity: critical
-        annotations:
-          summary: "Container down"
-          description: "Container không gửi metrics"
