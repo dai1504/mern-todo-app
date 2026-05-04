@@ -40,8 +40,8 @@ jobs:
 
       - name: Trigger Jenkins Deploy
         run: |
-          CRUMB=$(curl -u ${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }} \
-            http://52.221.219.52:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb))
+          CRUMB=$(curl -s -u ${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }} \
+            "http://52.221.219.52:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
 
           curl -X POST "http://52.221.219.52:8080/job/deploy/buildWithParameters?token=deploy-token&IMAGE_TAG=${{ env.TAG }}" \
             -u ${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }} \
