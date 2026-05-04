@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Deploy') {
             steps {
-                sshagent(credentials: ['devops-key']) {
+                sshagent(credentials: [SSH_KEY]) {
                     withCredentials([
                         string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI'),
                         string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET')
