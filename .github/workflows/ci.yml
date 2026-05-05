@@ -43,12 +43,14 @@ jobs:
           set -e
 
           JENKINS_URL="${{ secrets.JENKINS_URL }}"
+          USER="${{ secrets.JENKINS_USER }}"
+          TOKEN="${{ secrets.JENKINS_API_TOKEN }}"
 
-          echo "Connecting to: $JENKINS_URL"
+          TAG=${{ env.TAG }}
 
-          CRUMB=$(curl -s -u ${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }} \
+          CRUMB=$(curl -s -u $USER:$TOKEN \
             "$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
 
-          curl -X POST "$JENKINS_URL/job/deploy/buildWithParameters?token=deploy-token&IMAGE_TAG=${{ env.TAG }}" \
-            -u ${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }} \
+          curl -X POST "$JENKINS_URL/job/deploy/buildWithParameters?IMAGE_TAG=$TAG" \
+            -u "$USER:$TOKEN" \
             -H "$CRUMB"
