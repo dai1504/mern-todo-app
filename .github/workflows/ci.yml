@@ -51,6 +51,6 @@ jobs:
           CRUMB=$(curl -s -u $USER:$TOKEN \
             "$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
 
-          curl -X POST "$JENKINS_URL/job/deploy/buildWithParameters?IMAGE_TAG=$TAG" \
+          curl -X POST "$JENKINS_URL/job/Devops/buildWithParameters?IMAGE_TAG=$TAG" \
             -u "$USER:$TOKEN" \
             -H "$CRUMB"
